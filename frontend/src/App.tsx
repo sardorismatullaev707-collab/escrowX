@@ -296,6 +296,24 @@ function App() {
               </p>
             </div>
           </div>
+          
+          {/* Auto-refund info */}
+          <div className="mt-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-2xl p-6">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
+                  <span className="text-2xl">⚡</span>
+                </div>
+              </div>
+              <div className="flex-1">
+                <h4 className="text-lg font-bold text-white mb-2">🔒 Smart Contract Protection</h4>
+                <p className="text-slate-300 text-sm leading-relaxed">
+                  Funds are automatically refunded to the buyer if the delivery timeout expires. 
+                  No manual intervention needed — everything is handled by the blockchain.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Действия - большие понятные кнопки */}
