@@ -29,8 +29,6 @@ function App() {
   const [escrowSequence, setEscrowSequence] = useState('');
   const [finishLoading, setFinishLoading] = useState(false);
   const [finishResult, setFinishResult] = useState<EscrowResponse | null>(null);
-  const [cancelLoading, setCancelLoading] = useState(false);
-  const [cancelResult, setCancelResult] = useState<EscrowResponse | null>(null);
 
   // Transaction log
   const [transactionLog, setTransactionLog] = useState<TransactionLog[]>([]);
@@ -115,34 +113,6 @@ function App() {
       addToLog('finish', errorResult, errorMessage);
     } finally {
       setFinishLoading(false);
-    }
-  };
-
-  const handleCancelEscrow = async () => {
-    const sequence = parseInt(escrowSequence);
-
-    if (!sequence || sequence <= 0) {
-      alert('Please enter a valid escrow sequence');
-      return;
-    }
-
-    setCancelLoading(true);
-    setCancelResult(null);
-
-    try {
-      const result = await api.cancelEscrow({ escrowSequence: sequence });
-      setCancelResult(result);
-      addToLog('cancel', result);
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      const errorResult: EscrowResponse = {
-        success: false,
-        error: errorMessage,
-      };
-      setCancelResult(errorResult);
-      addToLog('cancel', errorResult, errorMessage);
-    } finally {
-      setCancelLoading(false);
     }
   };
 
@@ -320,9 +290,9 @@ function App() {
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-500 flex items-center justify-center text-3xl font-bold text-white">
                 3
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">Funds Released</h3>
+              <h3 className="text-xl font-bold text-white mb-3">Confirm & Release</h3>
               <p className="text-slate-300 text-sm leading-relaxed">
-                All good → funds to seller. Problem → automatic refund to buyer.
+                Confirm delivery to release funds to seller. Auto-refund if timeout expires.
               </p>
             </div>
           </div>
@@ -464,70 +434,6 @@ function App() {
                 </button>
 
                 <ResultDisplay result={finishResult} />
-              </div>
-            </div>
-          </div>
-
-          {/* Cancel Escrow */}
-          <div className="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 p-8 shadow-2xl">
-            <div className="flex items-start gap-6">
-              <div className="flex-shrink-0">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-600 to-orange-600 flex items-center justify-center shadow-lg">
-                  <span className="text-3xl">⏱️</span>
-                </div>
-              </div>
-              <div className="flex-1">
-                <h2 className="text-3xl font-bold text-white mb-2">Request Refund (After Timeout)</h2>
-                <p className="text-slate-300 text-lg mb-3">
-                  Refund is only available after the specified time window expires.
-                </p>
-                <div className="bg-yellow-500/10 border-l-4 border-yellow-500 p-4 rounded-lg mb-6">
-                  <p className="text-yellow-200 text-sm font-medium flex items-start gap-2">
-                    <span className="text-lg">⚠️</span>
-                    <span>This is not a free refund. Funds are released or refunded strictly based on on-chain rules.</span>
-                  </p>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-white font-bold mb-3 text-lg">
-                    🔢 Escrow Sequence (auto-filled)
-                  </label>
-                  <input
-                    type="number"
-                    value={escrowSequence}
-                    onChange={(e) => setEscrowSequence(e.target.value)}
-                    className="w-full px-6 py-4 bg-slate-900/50 border-2 border-slate-600 rounded-xl text-white text-xl font-mono placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all"
-                    min="1"
-                    placeholder="Will be filled after Step 1"
-                  />
-                  <p className="text-slate-400 text-sm mt-2">
-                    {escrowSequence ? '✓ Ready to request refund' : 'Complete Step 1 first'}
-                  </p>
-                </div>
-
-                <button
-                  onClick={handleCancelEscrow}
-                  disabled={cancelLoading || !escrowSequence}
-                  className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 disabled:from-slate-600 disabled:to-slate-700 text-white font-bold py-5 px-8 rounded-2xl transition-all duration-300 shadow-2xl hover:shadow-yellow-500/50 disabled:shadow-none transform hover:scale-[1.02] active:scale-[0.98] text-xl"
-                >
-                  {cancelLoading ? (
-                    <span className="flex items-center justify-center gap-3">
-                      <svg className="animate-spin h-6 w-6" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Requesting refund...
-                    </span>
-                  ) : (
-                    '⏱️ Request Refund (After Timeout)'
-                  )}
-                </button>
-                
-                <p className="text-slate-400 text-sm mt-4 text-center">
-                  Refund can only be processed after the time window expires
-                </p>
-
-                <ResultDisplay result={cancelResult} />
               </div>
             </div>
           </div>
