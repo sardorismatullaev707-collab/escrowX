@@ -477,9 +477,9 @@ function App() {
                 </div>
               </div>
               <div className="flex-1">
-                <h2 className="text-3xl font-bold text-white mb-2">Request Refund (If Service Not Delivered)</h2>
+                <h2 className="text-3xl font-bold text-white mb-2">Request Refund (After Timeout)</h2>
                 <p className="text-slate-300 text-lg mb-3">
-                  Refund is only available if the service is not delivered within the agreed time window.
+                  Refund is only available after the specified time window expires.
                 </p>
                 <div className="bg-yellow-500/10 border-l-4 border-yellow-500 p-4 rounded-lg mb-6">
                   <p className="text-yellow-200 text-sm font-medium flex items-start gap-2">
@@ -519,12 +519,12 @@ function App() {
                       Requesting refund...
                     </span>
                   ) : (
-                    '⏱️ Request Refund (After Delivery Timeout)'
+                    '⏱️ Request Refund (After Timeout)'
                   )}
                 </button>
                 
                 <p className="text-slate-400 text-sm mt-4 text-center">
-                  Refund can only be processed after the delivery timeout period expires
+                  Refund can only be processed after the time window expires
                 </p>
 
                 <ResultDisplay result={cancelResult} />
