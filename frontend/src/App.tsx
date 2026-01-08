@@ -472,15 +472,21 @@ function App() {
           <div className="bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 p-8 shadow-2xl">
             <div className="flex items-start gap-6">
               <div className="flex-shrink-0">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-                  <span className="text-3xl">🔄</span>
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-600 to-orange-600 flex items-center justify-center shadow-lg">
+                  <span className="text-3xl">⏱️</span>
                 </div>
               </div>
               <div className="flex-1">
-                <h2 className="text-3xl font-bold text-white mb-2">Problem? Get Refund</h2>
-                <p className="text-slate-300 text-lg mb-6">
-                  Goods didn't arrive or something's wrong? Click the button — funds will be returned automatically.
+                <h2 className="text-3xl font-bold text-white mb-2">Request Refund (If Service Not Delivered)</h2>
+                <p className="text-slate-300 text-lg mb-3">
+                  Refund is only available if the service is not delivered within the agreed time window.
                 </p>
+                <div className="bg-yellow-500/10 border-l-4 border-yellow-500 p-4 rounded-lg mb-6">
+                  <p className="text-yellow-200 text-sm font-medium flex items-start gap-2">
+                    <span className="text-lg">⚠️</span>
+                    <span>This is not a free refund. Funds are released or refunded strictly based on on-chain rules.</span>
+                  </p>
+                </div>
                 
                 <div className="mb-6">
                   <label className="block text-white font-bold mb-3 text-lg">
@@ -490,19 +496,19 @@ function App() {
                     type="number"
                     value={escrowSequence}
                     onChange={(e) => setEscrowSequence(e.target.value)}
-                    className="w-full px-6 py-4 bg-slate-900/50 border-2 border-slate-600 rounded-xl text-white text-xl font-mono placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-red-500/50 focus:border-red-500 transition-all"
+                    className="w-full px-6 py-4 bg-slate-900/50 border-2 border-slate-600 rounded-xl text-white text-xl font-mono placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all"
                     min="1"
                     placeholder="Will be filled after Step 1"
                   />
                   <p className="text-slate-400 text-sm mt-2">
-                    {escrowSequence ? '✓ Ready to cancel' : 'Complete Step 1 first'}
+                    {escrowSequence ? '✓ Ready to request refund' : 'Complete Step 1 first'}
                   </p>
                 </div>
 
                 <button
                   onClick={handleCancelEscrow}
                   disabled={cancelLoading || !escrowSequence}
-                  className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-slate-600 disabled:to-slate-700 text-white font-bold py-5 px-8 rounded-2xl transition-all duration-300 shadow-2xl hover:shadow-red-500/50 disabled:shadow-none transform hover:scale-[1.02] active:scale-[0.98] text-xl"
+                  className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 disabled:from-slate-600 disabled:to-slate-700 text-white font-bold py-5 px-8 rounded-2xl transition-all duration-300 shadow-2xl hover:shadow-yellow-500/50 disabled:shadow-none transform hover:scale-[1.02] active:scale-[0.98] text-xl"
                 >
                   {cancelLoading ? (
                     <span className="flex items-center justify-center gap-3">
@@ -510,12 +516,16 @@ function App() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Refunding...
+                      Requesting refund...
                     </span>
                   ) : (
-                    '🔄 Cancel & Refund'
+                    '⏱️ Request Refund (After Delivery Timeout)'
                   )}
                 </button>
+                
+                <p className="text-slate-400 text-sm mt-4 text-center">
+                  Refund can only be processed after the delivery timeout period expires
+                </p>
 
                 <ResultDisplay result={cancelResult} />
               </div>
@@ -564,7 +574,7 @@ function App() {
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold ${
                         log.action === 'create' ? 'bg-blue-500/30 text-blue-300' :
                         log.action === 'finish' ? 'bg-green-500/30 text-green-300' :
-                        'bg-red-500/30 text-red-300'
+                        'bg-yellow-600/30 text-yellow-300'
                       }`}>
                         {index + 1}
                       </div>
@@ -574,11 +584,11 @@ function App() {
                         <span className={`px-4 py-2 rounded-xl text-sm font-bold uppercase ${
                           log.action === 'create' ? 'bg-blue-500 text-white' :
                           log.action === 'finish' ? 'bg-green-500 text-white' :
-                          'bg-red-500 text-white'
+                          'bg-yellow-600 text-white'
                         }`}>
                           {log.action === 'create' ? '💰 LOCKED' : 
                            log.action === 'finish' ? '✅ RELEASED' : 
-                           '🔄 REFUNDED'}
+                           '⏱️ REFUND REQUESTED'}
                         </span>
                         <span className="text-slate-400 text-sm font-mono">
                           {log.timestamp.toLocaleTimeString('en-US')}
