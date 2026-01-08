@@ -18,9 +18,6 @@ function App() {
   // Xaman Wallet
   const { wallet, connecting, connect, disconnect } = useXamanWallet();
 
-  // Demo mode detection
-  const [isDemoMode, setIsDemoMode] = useState(false);
-
   // Create Escrow state
   const [amount, setAmount] = useState('10');
   const [invoiceId, setInvoiceId] = useState(`INV-${Date.now()}`);
@@ -78,9 +75,6 @@ function App() {
       setCreateResult(result);
       if (result.escrowSequence) {
         setEscrowSequence(result.escrowSequence.toString());
-      }
-      if (result.message?.includes('Demo mode')) {
-        setIsDemoMode(true);
       }
       addToLog('create', result);
     } catch (error) {
@@ -631,12 +625,6 @@ function App() {
 
         {/* Footer */}
         <div className="mt-12 text-center">
-          {isDemoMode && (
-            <div className="mb-4 inline-flex items-center gap-2 bg-yellow-500/20 border border-yellow-500/50 backdrop-blur-sm px-6 py-3 rounded-full">
-              <span className="text-2xl">🎭</span>
-              <span className="text-yellow-300 font-semibold">Demo mode (backend not connected)</span>
-            </div>
-          )}
           <div className="inline-flex items-center gap-2 bg-slate-800/50 backdrop-blur-sm px-6 py-3 rounded-full border border-slate-700">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-slate-300 font-semibold">Connected to XRPL Testnet</span>
